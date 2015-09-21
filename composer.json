@@ -1,0 +1,24 @@
+{
+    "name": "drakees/robotstxt",
+    "type": "library",
+    "description": "A simple class for parsing robots.txt files and telling whether certain paths are allowed for certain user agents",
+    "keywords": ["robots.txt", "crawler", "spider", "scrapper"],
+    "homepage": "https://github.com/DrakeES/RobotsTxt",
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Eugene Greendrake",
+            "email": "eugene@drakees.com",
+            "role": "Lead"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "DrakeES\\": ["src/"]
+        }
+    }
+}
