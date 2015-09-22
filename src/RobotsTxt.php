@@ -76,7 +76,6 @@ class RobotsTxt
     {
         $isCatchAll = false;
         $userAgentMatch = false;
-        $userAgentMatchCaught = false;
         $rules = [
                 'disallow' => [],
                 'delay' => 0
@@ -85,26 +84,46 @@ class RobotsTxt
             'catchAll' => $rules,
             'userAgentMatch' => $rules
         ];
+        $readingRules = false;
+        $stackKey = null;
         // Split robots.txt in lines and walk it line by line:
         foreach (preg_split('/$\R?^/m', $this->robotsTxt) as $line) {
             if (preg_match("/^User\-agent:\s*([^#\s]+)/", $line, $m)) {
-                if (!($isCatchAll = ($m[1] === '*'))) {
-                    $userAgentMatch = stripos($m[1], $this->userAgent) === 0;
+                if ($readingRules) {
+                    if ($userAgentMatch) {
+                        // We've parsed what interests us already and
+                        // currently must be in a completely unrelevant group.
+                        // Quit the loop.
+                        break;
+                    } else {
+                        $readingRules = false;
+                    }
                 }
-                $stackKey = $isCatchAll ? 'catchAll' : 'userAgentMatch';
+                if (
+                        !($isCatchAll = ($m[1] === '*'))
+                            &&
+                        !$userAgentMatch
+                            &&
+                        stripos($m[1], $this->userAgent) === 0
+                    ) {
+                    $userAgentMatch = true;
+                    $stackKey = 'userAgentMatch';
+                }
             }
-            if ($userAgentMatch) {
-                $userAgentMatchCaught = true;
-            } elseif (!$isCatchAll) {
+            if (!$userAgentMatch && !$isCatchAll) {
                 continue; // nothing of our current interest in the current line
+            } elseif ($stackKey === null) {
+                $stackKey = 'catchAll';
             }
             if (preg_match("/^disallow:\s*([^#\s]+)/i", $line, $m)) {
                 $rules[$stackKey]['disallow'][] = $m[1];
+                $readingRules = true;
             } elseif (preg_match("/^crawl\-delay:\s*(\d+)/i", $line, $m)) {
                 $rules[$stackKey]['delay'] = (int)$m[1];
+                $readingRules = true;
             }
         }
-        $this->parsed = $userAgentMatchCaught ? $rules['userAgentMatch'] : $rules['catchAll'];
+        $this->parsed = $userAgentMatch ? $rules['userAgentMatch'] : $rules['catchAll'];
     }
 
 }

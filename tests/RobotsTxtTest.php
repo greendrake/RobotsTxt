@@ -12,7 +12,9 @@ class RobotsTxtTest extends \PHPUnit_Framework_TestCase
 Sitemap: http://www.seek.co.nz/sitemap.xml
 
 # Google will not spider 
+User-agent: Rlkjkljh
 User-agent: Googlebot 
+User-agent: Ojhgjhgy
 Disallow: /alliances/
 Disallow: /Apply/ 
 Disallow: /JobApply/ 
@@ -44,7 +46,9 @@ Disallow: /MyAccount/ResetPassword
 Disallow: /JobApply/SubmittedByKnownUser?*
 
 # SEOmoz 
+User-agent: Ojsdf4gjhgy
 User-agent: rogerbot 
+User-agent: Oj4353ghgy
 Disallow: /alliances/
 Disallow: /content/images/
 Disallow: /Resource/
@@ -68,7 +72,9 @@ User-agent: Mediapartners-Google
 Disallow:
 
 # LinkedIn Bot
+User-agent: Akjhkh
 User-agent: LinkedInBot
+User-agent: Ljhg76
 Disallow: /
 
 # proximic
